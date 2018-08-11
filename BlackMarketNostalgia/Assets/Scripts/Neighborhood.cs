@@ -13,19 +13,22 @@ public enum Income
 public class Neighborhood : MonoBehaviour
 {
 
-    [SerializeField] string m_name;
-    [SerializeField] int m_population;
+    public string m_name;
+    public int m_population;
     [Range(0,100)]
-    [SerializeField] int m_corporateInfluence;
-    [SerializeField] Temperament m_temperament;
-    [SerializeField] Income m_income;
+    public int m_corporateInfluence;
+    public Temperament m_temperament;
+    public Income m_income;
 
     private GUIStyle guiStyleBox;
     private string text;
     private string currentToolTipText = "";
 
+    GameManager gm;
+
     private void Start()
     {
+        gm = FindObjectOfType<GameManager>();
         // TODO use to customize GUI later
         guiStyleBox = new GUIStyle();
         FormatText();
@@ -49,6 +52,11 @@ public class Neighborhood : MonoBehaviour
             float y = Event.current.mousePosition.y;
             GUI.Box(new Rect(x + 10, y + 10, 300, 110), currentToolTipText);
         }
+    }
+
+    private void OnMouseDown()
+    {
+        gm.SetSelectedNeighborhood(this);
     }
 
     private void OnMouseEnter()
