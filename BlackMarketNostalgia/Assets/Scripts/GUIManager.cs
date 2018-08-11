@@ -6,44 +6,27 @@ using UnityEngine.UI;
 public class GUIManager : MonoBehaviour {
 
     public Text text;
+    public Text title;
     string outputText;
-
-    private void OnEnable()
-    {
-        GameManager.PlayerSuccess += PlayerSuccess;
-        GameManager.CorporateSuccess += CorporateSuccess;
-        GameManager.NoSuccess += NoSuccess;
-    }
-
-    private void OnDisable()
-    {
-        GameManager.PlayerSuccess -= PlayerSuccess;
-        GameManager.CorporateSuccess -= CorporateSuccess;
-        GameManager.NoSuccess -= NoSuccess;
-    }
+    GameManager gm;
 
     private void Start()
     {
-        outputText = "Select a neighborhood to influence.";
+        gm = FindObjectOfType<GameManager>();
     }
 
     private void Update()
     {
+        outputText = gm.time.ToString();
         text.text = outputText;
-    }
+        if (gm.GetSelectedNeighborhood() != null)
+        {
+            title.text = gm.GetSelectedNeighborhood().ToString();
+        }
+        else
+        {
+            title.text = "Select Neighborhood.";
+        }
 
-    void PlayerSuccess()
-    {
-        outputText = "The player spreads influence.";
-    }
-
-    void CorporateSuccess()
-    {
-        outputText = "The people resist the player's influence";
-    }
-
-    void NoSuccess()
-    {
-        outputText = "There is no change in influence";
     }
 }

@@ -1,31 +1,37 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public enum Temperament
 {
     Outraged, Apathetic, Neutral, Sypathetic, Patriotic,
 }
 
-public enum Income
+public enum Class
 {
     Poverty, LowerMiddle, Middle, UpperMiddle, Upper, Ruling,
 }
 
 public class Neighborhood : MonoBehaviour
 {
-
+    public float availableInfluence;
     public string m_name;
     public int m_population;
     [Range(0,100)]
-    public int m_corporateInfluence;
+    public float m_corporateInfluence;
     public Temperament m_temperament;
-    public Income m_income;
+    public Class m_class;
 
     private GUIStyle guiStyleBox;
     private string text;
     private string currentToolTipText = "";
+    private float waitTime;
 
     GameManager gm;
 
+    public Class GetClass() { return m_class; }
+    public Temperament GetTemperament() { return m_temperament; }
+    public void SetTime(float time) { waitTime = time; }
     private void Start()
     {
         gm = FindObjectOfType<GameManager>();
@@ -34,13 +40,33 @@ public class Neighborhood : MonoBehaviour
         FormatText();
     }
 
+    private void Update()
+    {
+        CalculateAvailableInfluence();
+    }
+
+    public IEnumerator DeductInfluence()
+    {
+        while(availableInfluence > 0)
+        {
+            availableInfluence -= 20;
+
+            yield return new WaitForSeconds(waitTime);
+        }
+    }
+
+    public void CalculateAvailableInfluence()
+    {
+        availableInfluence = m_population - (m_population * (m_corporateInfluence / 100));
+    }
+
     private void FormatText()
     {
         text = "\nName: " + m_name + "\n"
             + "Population: " + m_population + "\n"
             + "Corporate Influence: " + m_corporateInfluence.ToString() + "\n"
             + "Temperament: " + m_temperament.ToString() + "\n"
-            + "Income: " + m_income.ToString();
+            + "Income: " + m_class.ToString();
     }
 
     private void OnGUI()

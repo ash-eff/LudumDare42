@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
+    
+
     public delegate void OutcomeEvent();
     public static event OutcomeEvent PlayerSuccess;
     public static event OutcomeEvent CorporateSuccess;
     public static event OutcomeEvent NoSuccess;
-    
+    public float time = 0;
+
     Neighborhood selectedNeighborhood;
     Player player;
 
@@ -18,44 +21,17 @@ public class GameManager : MonoBehaviour {
     }
 
     public void SetSelectedNeighborhood(Neighborhood neightborhood) { selectedNeighborhood = neightborhood; }
+    public Neighborhood GetSelectedNeighborhood() { return selectedNeighborhood; }
 
     public void CalculateStats()
     {
-        if(selectedNeighborhood != null)
+        if (selectedNeighborhood != null)
         {
-            float neighborhoodStatTotal = ((int)selectedNeighborhood.m_temperament + 1 * (int)selectedNeighborhood.m_income + 1) +
-                                selectedNeighborhood.m_corporateInfluence;
-            print("Neightborhood Stats: " + neighborhoodStatTotal);
+            player.SetAdjustedVoice(player.GetVoice() / ((int)selectedNeighborhood.GetClass() + 1));
+            float adjustedVoice = player.GetAdjustedVoice();
 
-            float playerStatTotal = player.m_influence * player.m_voice + player.m_supplyQuality;
-            print("Player stats: " + playerStatTotal);
-
-            if (playerStatTotal > neighborhoodStatTotal)
-            {
-                if (PlayerSuccess != null)
-                {
-                    PlayerSuccess();
-                }
-            }
-            else if (playerStatTotal < neighborhoodStatTotal)
-            {
-                if (CorporateSuccess != null)
-                {
-                    CorporateSuccess();
-                }
-            }
-            else
-            {
-                if (NoSuccess != null)
-                {
-                    NoSuccess();
-                }
-            }
-        }
-
-        else
-        {
-            Debug.Log("No neighborhood selected");
+            time = (((int)selectedNeighborhood.GetTemperament() + 1) + ((int)selectedNeighborhood.GetClass() + 1)) / (player.GetPersistence() + player.GetPersistenceBoost() + adjustedVoice);
+            selectedNeighborhood.SetTime(time);
         }
     }   
 }
