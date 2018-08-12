@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
 
     // currency
     public float m_influence = 0;
+    public float m_chits = 0;
+    public string m_title;
 
     // the ability to battle against the class of the neighborhood. Having more boosts players persistence
     // formula is Voice / Class = Adjusted Voice
@@ -28,4 +30,23 @@ public class Player : MonoBehaviour
     public float GetVoiceBoost() { return m_voiceBoost; }
     public float GetPersistence() { return m_persistence; }
     public float GetPersistenceBoost() { return m_persistenceBoost; }
+
+    private void Update()
+    {
+        int switchCase = (int)m_influence / 4000;
+        switch(switchCase)
+        {
+            case 1:
+                m_title = "Known";
+                break;
+
+            case 2:
+                m_title = "Extra Known";
+                break;
+
+            default:
+                m_title = "Unknown";
+                break;
+        }
+    }
 }

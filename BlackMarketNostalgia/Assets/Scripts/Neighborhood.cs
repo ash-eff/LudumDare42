@@ -16,44 +16,112 @@ public class Neighborhood : MonoBehaviour
 {
     public Sprite unlock, locked;
 
-    public float availableInfluence;
-    public float givenInfluence;
     public string m_name;
-    public int m_population;
-    [Range(0,100)]
+    public float m_givenInfluence;
+    [Range(0, 100)]
     public float m_corporateInfluence;
+    public int m_population;
+   
     public Temperament m_temperament;
     public Class m_class;
 
-    private string text;
-    private string currentToolTipText = "";
-    private float waitTime;
-    private bool isDeductingInfluence;
     public bool isUnlocked;
+    public bool isPlayerDispensing;
+
+    private float m_adjustedVoice;
+    private float m_waitTime;
+    public float m_influenceGainedPerSecond;
+    private float m_influenceGainedPerTick;
+    private float m_corporateInfluenceDecrease;
+
+    private float m_chitsEarned;
+    private float timer;
+
+    private bool isDisplayingInfo;
+    private bool onMouseOver;
+    public bool isShowingInfo;
 
     GameManager gm;
     Player player;
     SpriteRenderer sr;
+    GUIManager guiManager;
+    TextMesh tm;
+    MeshRenderer mr;
 
-    public Class GetClass() { return m_class; }
-    public Temperament GetTemperament() { return m_temperament; }
-    public void SetTime(float time) { waitTime = time; }
-    public void SetIsDeductingInfluence(bool b) { isDeductingInfluence = b; }
-    public bool GetIsDeductingInfluence() { return isDeductingInfluence; }
+    private void OnEnable()
+    {
+        Tick.CallTick += InfluencedByPlayer;
+    }
+
+    private void OnDisable()
+    {
+        Tick.CallTick -= InfluencedByPlayer;
+    }
 
     private void Start()
     {
-        isDeductingInfluence = false;
+        isDisplayingInfo = false;
+        tm = GetComponentInChildren<TextMesh>();
+        mr = GetComponentInChildren<MeshRenderer>();
+        timer = 2.5f;
+        isPlayerDispensing = false;
+        guiManager = FindObjectOfType<GUIManager>();
         player = FindObjectOfType<Player>();
         gm = FindObjectOfType<GameManager>();
         sr = GetComponent<SpriteRenderer>();
-        FormatText();
-        CalculateAvailableInfluence();
     }
 
     private void Update()
     {
-        if(isUnlocked)
+        
+        SpriteSwap();
+        if(mr.enabled)
+        {
+            timer -= Time.deltaTime;
+
+            if(timer <= 0)
+            {
+                mr.enabled = false;
+                timer = 2.5f;
+            }
+        }
+
+        if (isDisplayingInfo)
+        {
+            DisplayInfo();
+        }
+
+        if(Input.GetMouseButtonDown(0) && onMouseOver)
+        {
+            isShowingInfo = true;
+            gm.SetSelectedNeighborhood(this);
+            guiManager.m_neighborhoodName.text = "Name: " + this.name;
+            guiManager.m_population.text = "Population: " + m_population.ToString();
+            guiManager.m_corporateInfluence.text = "Corporate Inf: " + System.Math.Round(m_corporateInfluence, 2).ToString();
+            guiManager.m_temperament.text = "Temperament: " + m_temperament.ToString();
+            guiManager.m_class.text = "Class: " + m_class.ToString();
+            guiManager.m_distributing.text = "Distributing: " + isPlayerDispensing.ToString();
+        }
+
+        if(gm.GetSelectedNeighborhood() != this)
+        {
+            isShowingInfo = false;
+        }
+
+        if (isShowingInfo)
+        {
+            guiManager.m_corporateInfluence.text = "Corporate Inf: " + m_corporateInfluence.ToString();
+        }
+    }
+
+    private void DisplayInfo()
+    {
+
+    }
+
+    private void SpriteSwap()
+    {
+        if (isUnlocked)
         {
             sr.sprite = unlock;
         }
@@ -63,64 +131,38 @@ public class Neighborhood : MonoBehaviour
         }
     }
 
-    public IEnumerator DeductInfluence()
+    private void InfluencedByPlayer()
     {
-        while(isDeductingInfluence && availableInfluence > givenInfluence)
+        if (isUnlocked && isPlayerDispensing)
         {
-            givenInfluence += 20f;
-            player.m_influence += 20f;
-
-            yield return new WaitForSeconds(waitTime);
-        }
-    }
-
-    public void CalculateAvailableInfluence()
-    {
-        availableInfluence = m_population - (m_population * (m_corporateInfluence / 100));
-    }
-
-    private void FormatText()
-    {
-        text = "\nName: " + m_name + "\n"
-            + "Population: " + m_population + "\n"
-            + "Corporate Influence: " + m_corporateInfluence.ToString() + "\n"
-            + "Temperament: " + m_temperament.ToString() + "\n"
-            + "Income: " + m_class.ToString();
-    }
-
-    private void OnGUI()
-    {
-        if (currentToolTipText != "")
-        {
-            // follow mouse pos
-            float x = Event.current.mousePosition.x;
-            float y = Event.current.mousePosition.y;
-            GUI.Box(new Rect(x + 10, y + 10, 300, 110), currentToolTipText);
-        }
-    }
-
-    private void OnMouseDown()
-    {
-        if(!isUnlocked && player.m_influence > gm.amountToUnlockNextNeighborhood)
-        {
-            isUnlocked = true;
-            gm.IncreaseUnlockCost();
-        }
-
-        if (isUnlocked)
-        {
-            gm.SetSelectedNeighborhood(this);
+            m_adjustedVoice = Calculations.AdjustedVoice(player.m_voice, player.m_voiceBoost, (int)m_class);
+            m_waitTime = Calculations.TimeBetweenTick((int)m_temperament, (int)m_class, player.m_persistence, player.m_persistenceBoost, m_adjustedVoice);
+            m_influenceGainedPerSecond = Calculations.InfluenceGainedPerSecond(player.m_voice, player.m_voiceBoost, player.m_persistence, player.m_persistenceBoost, (int)m_temperament, (int)m_class);
+            m_influenceGainedPerTick = Calculations.InfluenceGainedPerTick(m_influenceGainedPerSecond);
+            m_corporateInfluenceDecrease = Calculations.CorporateInfluenceDecrease(m_influenceGainedPerSecond);
+            m_chitsEarned = Calculations.ChitsEarned(m_influenceGainedPerSecond, (int)m_class);
+            mr.enabled = true;
+            tm.text = "+" + System.Math.Round(m_influenceGainedPerTick, 2).ToString();
+            player.m_influence += m_influenceGainedPerTick;
+            player.m_chits += m_chitsEarned;
+            if((m_corporateInfluence - m_corporateInfluenceDecrease) <= 0)
+            {
+                m_corporateInfluence = 0;
+            }
+            else
+            {
+                m_corporateInfluence -= m_corporateInfluenceDecrease;
+            }
         }
     }
 
     private void OnMouseEnter()
     {
-        currentToolTipText = text;
+        onMouseOver = true;
     }
 
     private void OnMouseExit()
     {
-        currentToolTipText = "";
+        onMouseOver = false;
     }
-
 }
