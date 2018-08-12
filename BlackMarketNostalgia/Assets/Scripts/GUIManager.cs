@@ -7,12 +7,17 @@ public class GUIManager : MonoBehaviour {
 
     public Text text;
     public Text title;
+    public Text influenceTotal;
+    public Text nextUnlock;
     string outputText;
+    string influenceText;
     GameManager gm;
+    Player player;
 
     private void Start()
     {
         gm = FindObjectOfType<GameManager>();
+        player = FindObjectOfType<Player>();
     }
 
     private void Update()
@@ -28,5 +33,8 @@ public class GUIManager : MonoBehaviour {
             title.text = "Select Neighborhood.";
         }
 
+        influenceText = player.m_influence.ToString();
+        influenceTotal.text = influenceText;
+        nextUnlock.text = gm.amountToUnlockNextNeighborhood.ToString();
     }
 }

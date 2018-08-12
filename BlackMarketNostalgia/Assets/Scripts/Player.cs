@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     List<Upgrade> upgrades = new List<Upgrade>();
 
     // currency
-    public float m_influence;
+    public float m_influence = 0;
 
     // the ability to battle against the class of the neighborhood. Having more boosts players persistence
     // formula is Voice / Class = Adjusted Voice
@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
     public void SetAdjustedVoice(float adjustedVoice) { m_adjustedVoice = adjustedVoice; }
 
     public float GetVoice() { return m_voice; }
+    public float GetVoiceBoost() { return m_voiceBoost; }
     public float GetPersistence() { return m_persistence; }
     public float GetPersistenceBoost() { return m_persistenceBoost; }
 }
