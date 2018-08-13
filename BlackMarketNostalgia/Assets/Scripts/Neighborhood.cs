@@ -44,6 +44,7 @@ public class Neighborhood : MonoBehaviour
     Player player;
     SpriteRenderer sr;
     GUIManager guiManager;
+    public SpriteRenderer sRend;
     public TextMesh floatingText;
     public TextMesh nameText;
     public TextMesh lockedText;
@@ -61,6 +62,7 @@ public class Neighborhood : MonoBehaviour
 
     private void Start()
     {
+        sRend.enabled = false;
         nameText.text = this.name.ToString();
         isDisplayingInfo = false;
         timer = 2.5f;
@@ -144,10 +146,12 @@ public class Neighborhood : MonoBehaviour
     private void OnMouseEnter()
     {
         onMouseOver = true;
+        sRend.enabled = true;
     }
 
     private void OnMouseExit()
     {
         onMouseOver = false;
+        sRend.enabled = false;
     }
 }
