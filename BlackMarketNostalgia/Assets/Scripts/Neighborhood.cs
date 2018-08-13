@@ -14,8 +14,6 @@ public enum Class
 
 public class Neighborhood : MonoBehaviour
 {
-    public Sprite unlock, locked;
-
     public string m_name;
     public float m_givenInfluence;
     [Range(0, 100)]
@@ -39,14 +37,17 @@ public class Neighborhood : MonoBehaviour
 
     private bool isDisplayingInfo;
     private bool onMouseOver;
+    private bool isPopupTextShowing;
     public bool isShowingInfo;
 
     GameManager gm;
     Player player;
     SpriteRenderer sr;
     GUIManager guiManager;
-    TextMesh tm;
-    MeshRenderer mr;
+    public TextMesh floatingText;
+    public TextMesh nameText;
+    public TextMesh lockedText;
+    public MeshRenderer mr;
 
     private void OnEnable()
     {
@@ -60,9 +61,8 @@ public class Neighborhood : MonoBehaviour
 
     private void Start()
     {
+        nameText.text = this.name.ToString();
         isDisplayingInfo = false;
-        tm = GetComponentInChildren<TextMesh>();
-        mr = GetComponentInChildren<MeshRenderer>();
         timer = 2.5f;
         isPlayerDispensing = false;
         guiManager = FindObjectOfType<GUIManager>();
@@ -73,8 +73,6 @@ public class Neighborhood : MonoBehaviour
 
     private void Update()
     {
-        
-        SpriteSwap();
         if(mr.enabled)
         {
             timer -= Time.deltaTime;
@@ -86,9 +84,13 @@ public class Neighborhood : MonoBehaviour
             }
         }
 
-        if (isDisplayingInfo)
+        if (isUnlocked)
         {
-            DisplayInfo();
+            lockedText.text = "";
+        }
+        else
+        {
+            lockedText.text = "Locked";
         }
 
         if(Input.GetMouseButtonDown(0) && onMouseOver)
@@ -114,23 +116,6 @@ public class Neighborhood : MonoBehaviour
         }
     }
 
-    private void DisplayInfo()
-    {
-
-    }
-
-    private void SpriteSwap()
-    {
-        if (isUnlocked)
-        {
-            sr.sprite = unlock;
-        }
-        else
-        {
-            sr.sprite = locked;
-        }
-    }
-
     private void InfluencedByPlayer()
     {
         if (isUnlocked && isPlayerDispensing)
@@ -142,7 +127,7 @@ public class Neighborhood : MonoBehaviour
             m_corporateInfluenceDecrease = Calculations.CorporateInfluenceDecrease(m_influenceGainedPerSecond);
             m_chitsEarned = Calculations.ChitsEarned(m_influenceGainedPerSecond, (int)m_class);
             mr.enabled = true;
-            tm.text = "+" + System.Math.Round(m_influenceGainedPerTick, 2).ToString();
+            floatingText.text = "+" + System.Math.Round(m_influenceGainedPerTick, 2).ToString();
             player.m_influence += m_influenceGainedPerTick;
             player.m_chits += m_chitsEarned;
             if((m_corporateInfluence - m_corporateInfluenceDecrease) <= 0)

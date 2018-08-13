@@ -35,6 +35,6 @@ public class GUIManager : MonoBehaviour {
         m_voice.text = "Voice: " + System.Math.Round(player.m_voice + player.m_voiceBoost, 2);
         m_persistence.text = "Persistence: " + System.Math.Round(player.m_persistence + player.m_persistenceBoost, 2);
         m_chits.text = "Chits: " + System.Math.Round(player.m_chits, 2).ToString();
-        m_nextUnlock.text = "Next Unlock: " + gm.amountToUnlockNextNeighborhood.ToString();
+        m_nextUnlock.text = "Next Unlock: " + gm.amountToUnlockNextNeighborhood.ToString() + " Influence";
     }
 }

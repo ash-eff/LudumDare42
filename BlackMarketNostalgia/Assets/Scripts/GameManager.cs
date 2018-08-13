@@ -77,6 +77,6 @@ public class GameManager : MonoBehaviour {
 
     public void IncreaseUnlockCost()
     {
-        Mathf.RoundToInt(amountToUnlockNextNeighborhood *= 1.5f);
+        Mathf.RoundToInt(amountToUnlockNextNeighborhood *= 2f);
     }
 }

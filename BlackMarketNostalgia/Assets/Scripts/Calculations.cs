@@ -27,13 +27,13 @@
 
     public static float CorporateInfluenceDecrease(float iG)
     {
-        float outcome = iG / 4;
+        float outcome = iG / 40;
         return outcome;
     }
 
     public static float ChitsEarned(float iG, float c)
     {
-        float outcome = iG * (c + 1);
+        float outcome = (iG / 10) * (c + 1);
         return outcome;
     }
 }
