@@ -65,8 +65,12 @@ public class GameManager : MonoBehaviour {
 
     public void UnlockNeighborhood()
     {
-        selectedNeighborhood.isUnlocked = true;
-        IncreaseUnlockCost();
+        if (!selectedNeighborhood.isUnlocked)
+        {
+            selectedNeighborhood.isUnlocked = true;
+            IncreaseUnlockCost();
+        }
+
     }
 
     public void DispenseNostalgia()

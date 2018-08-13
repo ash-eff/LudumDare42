@@ -42,13 +42,15 @@ public class Neighborhood : MonoBehaviour
 
     GameManager gm;
     Player player;
-    SpriteRenderer sr;
+    
     GUIManager guiManager;
-    public SpriteRenderer sRend;
-    public TextMesh floatingText;
+
     public TextMesh nameText;
-    public TextMesh lockedText;
+    public TextMesh floatingText;
     public MeshRenderer mr;
+    public SpriteRenderer sr;
+    public SpriteRenderer outline;
+    //public TextMesh lockedText;
 
     private void OnEnable()
     {
@@ -62,7 +64,6 @@ public class Neighborhood : MonoBehaviour
 
     private void Start()
     {
-        sRend.enabled = false;
         nameText.text = this.name.ToString();
         isDisplayingInfo = false;
         timer = 2.5f;
@@ -70,7 +71,6 @@ public class Neighborhood : MonoBehaviour
         guiManager = FindObjectOfType<GUIManager>();
         player = FindObjectOfType<Player>();
         gm = FindObjectOfType<GameManager>();
-        sr = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -88,11 +88,13 @@ public class Neighborhood : MonoBehaviour
 
         if (isUnlocked)
         {
-            lockedText.text = "";
+            //lockedText.text = "";
+            sr.enabled = false;
         }
         else
         {
-            lockedText.text = "Locked";
+            //lockedText.text = "Locked";
+            sr.enabled = true;
         }
 
         if(Input.GetMouseButtonDown(0) && onMouseOver)
@@ -105,9 +107,11 @@ public class Neighborhood : MonoBehaviour
             guiManager.m_temperament.text = "Temperament: " + m_temperament.ToString();
             guiManager.m_class.text = "Class: " + m_class.ToString();
             guiManager.m_distributing.text = "Distributing: " + isPlayerDispensing.ToString();
+
+            outline.enabled = true;
         }
 
-        if(gm.GetSelectedNeighborhood() != this)
+        if (gm.GetSelectedNeighborhood() != this)
         {
             isShowingInfo = false;
         }
@@ -146,12 +150,13 @@ public class Neighborhood : MonoBehaviour
     private void OnMouseEnter()
     {
         onMouseOver = true;
-        sRend.enabled = true;
+        outline.enabled = true;
+        
     }
 
     private void OnMouseExit()
     {
         onMouseOver = false;
-        sRend.enabled = false;
+        outline.enabled = false;
     }
 }
