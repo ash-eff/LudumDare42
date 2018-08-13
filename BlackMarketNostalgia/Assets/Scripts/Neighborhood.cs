@@ -45,12 +45,15 @@ public class Neighborhood : MonoBehaviour
     
     GUIManager guiManager;
 
+    public AudioSource click;
     public TextMesh nameText;
     public TextMesh floatingText;
     public MeshRenderer mr;
     public SpriteRenderer sr;
     public SpriteRenderer outline;
     //public TextMesh lockedText;
+
+    public Shop shop;
 
     private void OnEnable()
     {
@@ -64,6 +67,7 @@ public class Neighborhood : MonoBehaviour
 
     private void Start()
     {
+        
         nameText.text = this.name.ToString();
         isDisplayingInfo = false;
         timer = 2.5f;
@@ -151,6 +155,12 @@ public class Neighborhood : MonoBehaviour
     {
         onMouseOver = true;
         outline.enabled = true;
+
+        if(!shop.shopOpen)
+        {
+            click.Play();
+        }
+        
         
     }
 

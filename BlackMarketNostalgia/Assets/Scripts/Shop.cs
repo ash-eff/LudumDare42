@@ -9,10 +9,15 @@ public class Shop : MonoBehaviour {
     public Text upgradeName;
     public Text flavorText;
     public Text chitCost;
+    public Text notification;
 
     public Upgrade currentUpgrade;
 
+    public bool shopOpen;
+
     public void SetCurrentUpgrade(Upgrade x) { currentUpgrade = x; }
+
+    float timer;
 
     Player player;
 
@@ -21,12 +26,22 @@ public class Shop : MonoBehaviour {
         player = FindObjectOfType<Player>();
     }
 
+    private void Update()
+    {
+        timer -= Time.deltaTime;
+        if(timer <= 0)
+        {
+            notification.text = "";
+        }
+    }
+
     public void OpenWindow()
     {
         if (window.activeSelf == false)
         {
             window.SetActive(true);
-            Time.timeScale = 0;
+            shopOpen = true;
+            //Time.timeScale = 0;
         }
     }
 
@@ -35,7 +50,8 @@ public class Shop : MonoBehaviour {
         if(window.activeSelf == true)
         {           
             window.SetActive(false);
-            Time.timeScale = 1;
+            shopOpen = false;
+            //Time.timeScale = 1;
         }
     }
 
@@ -44,6 +60,7 @@ public class Shop : MonoBehaviour {
         currentUpgrade = EventSystem.current.currentSelectedGameObject.GetComponent<Upgrade>();
         upgradeName.text = currentUpgrade.name;
         flavorText.text = currentUpgrade.flavorText.text;
+        
         chitCost.text = "Chits: " + currentUpgrade.chitCost.ToString();
     }
 
@@ -54,6 +71,20 @@ public class Shop : MonoBehaviour {
             player.m_chits -= currentUpgrade.chitCost;
             player.m_voiceBoost += currentUpgrade.upgradeAmount;
             currentUpgrade.purchased = true;
+            timer = 2f;
+            notification.text = "Purchased!";
+        }
+        else if (currentUpgrade.purchased)
+        {
+            timer = 2f;
+            notification.text = "Already purchased!";
+        }
+        else
+        {
+            timer = 2f;
+            notification.text = "Not enough chits!";
         }
     }
+
+    
 }
