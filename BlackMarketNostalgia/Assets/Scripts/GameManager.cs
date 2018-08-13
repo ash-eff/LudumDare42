@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour {
 
     private float adjustedVoice;
 
-    Neighborhood selectedNeighborhood;
+    public Neighborhood selectedNeighborhood;
     Player player;
     GUIManager guiManager;
 
@@ -65,6 +65,11 @@ public class GameManager : MonoBehaviour {
 
     public void UnlockNeighborhood()
     {
+        if (selectedNeighborhood == null)
+        {
+            Debug.Log("OOPS");
+        }
+
         if (!selectedNeighborhood.isUnlocked)
         {
             selectedNeighborhood.isUnlocked = true;

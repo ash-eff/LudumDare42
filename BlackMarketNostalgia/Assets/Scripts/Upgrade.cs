@@ -1,13 +1,14 @@
-﻿public class Upgrade
-{
-    string m_name;
-    string m_flavorText;
-    int m_boostAmount;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
 
-    public Upgrade(string name, string flavorText, int boostAmount)
-    {
-        m_name = name;
-        m_flavorText = flavorText;
-        m_boostAmount = boostAmount;
-    }
+public class Upgrade : MonoBehaviour {
+
+    public int chitCost = 0;
+    public float upgradeAmount = 0;
+
+    public Text flavorText;
+
+    public bool purchased;
 }
