@@ -5,15 +5,15 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
-    public delegate void OutcomeEvent();
-    public static event OutcomeEvent PlayerSuccess;
-    public static event OutcomeEvent CorporateSuccess;
-    public static event OutcomeEvent NoSuccess;
+    public static int neighborhoodsFreed;
+    public static int neighborhoodsUnlocked = 1;
+
     public float timer = 5;
     public float amountToUnlockNextNeighborhood;
     public Button unlockButton;
     public Button dispenseButton;
-
+    public Image winScreen;
+    public int test;
     private float adjustedVoice;
 
     public Neighborhood selectedNeighborhood;
@@ -38,6 +38,14 @@ public class GameManager : MonoBehaviour {
         {
             player.m_persistenceBoost = (player.m_influence * player.m_persistence) * .0001f;
             timer = 20f;
+        }
+
+        test = neighborhoodsFreed;
+
+        if (neighborhoodsFreed == 22)
+        {
+            Time.timeScale = 0;
+            winScreen.gameObject.SetActive(true);
         }
 
         CheckForUnlock();
@@ -81,6 +89,7 @@ public class GameManager : MonoBehaviour {
         if (!selectedNeighborhood.isUnlocked)
         {
             selectedNeighborhood.isUnlocked = true;
+            neighborhoodsUnlocked += 1;
             IncreaseUnlockCost();
         }
 

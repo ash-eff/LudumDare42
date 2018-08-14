@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    // TODO create a list to store items
-    List<Upgrade> upgrades = new List<Upgrade>();
-
     // currency
     public float m_influence = 0;
     public float m_chits = 0;

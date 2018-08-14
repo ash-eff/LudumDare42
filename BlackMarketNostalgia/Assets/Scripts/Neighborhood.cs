@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum Temperament
 {
@@ -13,7 +14,7 @@ public enum Class
 }
 
 public class Neighborhood : MonoBehaviour
-{
+{  
     public string m_name;
     public float m_givenInfluence;
     [Range(0, 100)]
@@ -39,6 +40,7 @@ public class Neighborhood : MonoBehaviour
     private bool onMouseOver;
     private bool isPopupTextShowing;
     public bool isShowingInfo;
+    private bool hasCorpInfluence;
 
     GameManager gm;
     Player player;
@@ -67,7 +69,7 @@ public class Neighborhood : MonoBehaviour
 
     private void Start()
     {
-        
+        hasCorpInfluence = true;
         nameText.text = this.name.ToString();
         isDisplayingInfo = false;
         timer = 2.5f;
@@ -130,9 +132,10 @@ public class Neighborhood : MonoBehaviour
     {
         if (isUnlocked && isPlayerDispensing)
         {
-            m_adjustedVoice = Calculations.AdjustedVoice(player.m_voice, player.m_voiceBoost, (int)m_class);
-            m_waitTime = Calculations.TimeBetweenTick((int)m_temperament, (int)m_class, player.m_persistence, player.m_persistenceBoost, m_adjustedVoice);
-            m_influenceGainedPerSecond = Calculations.InfluenceGainedPerSecond(player.m_voice, player.m_voiceBoost, player.m_persistence, player.m_persistenceBoost, (int)m_temperament, (int)m_class);
+            m_adjustedVoice = Calculations.AdjustedVoice(player.m_voice, player.m_voiceBoost, m_corporateInfluence);
+            //m_waitTime = Calculations.TimeBetweenTick((int)m_temperament, (int)m_class, player.m_persistence, player.m_persistenceBoost, m_adjustedVoice);
+            m_influenceGainedPerSecond = Calculations.InfluenceGainedPerSecond(player.m_voice, player.m_voiceBoost, player.m_persistence, player.m_persistenceBoost, (int)m_temperament, m_corporateInfluence);
+            print(m_influenceGainedPerSecond);
             m_influenceGainedPerTick = Calculations.InfluenceGainedPerTick(m_influenceGainedPerSecond);
             m_corporateInfluenceDecrease = Calculations.CorporateInfluenceDecrease(m_influenceGainedPerSecond);
             m_chitsEarned = Calculations.ChitsEarned(m_influenceGainedPerSecond, (int)m_class);
@@ -143,6 +146,11 @@ public class Neighborhood : MonoBehaviour
             if((m_corporateInfluence - m_corporateInfluenceDecrease) <= 0)
             {
                 m_corporateInfluence = 0;
+                if (hasCorpInfluence)
+                {
+                    GameManager.neighborhoodsFreed += 1;
+                    hasCorpInfluence = false;
+                }
             }
             else
             {
@@ -159,9 +167,7 @@ public class Neighborhood : MonoBehaviour
         if(!shop.shopOpen)
         {
             click.Play();
-        }
-        
-        
+        }      
     }
 
     private void OnMouseExit()
