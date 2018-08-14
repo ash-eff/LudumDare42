@@ -48,5 +48,6 @@ public class Player : MonoBehaviour
                 m_title = "Unknown";
                 break;
         }
+
     }
 }

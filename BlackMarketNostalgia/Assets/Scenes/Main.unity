@@ -309,7 +309,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chitCost: 150
-  upgradeAmount: 1
+  upgradeAmount: 1.5
   flavorText: {fileID: 749714083}
   purchased: 0
 --- !u!1 &49198259
@@ -686,7 +686,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chitCost: 400
-  upgradeAmount: 1.5
+  upgradeAmount: 2
   flavorText: {fileID: 1761837839}
   purchased: 0
 --- !u!1001 &87503612
@@ -957,7 +957,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chitCost: 100
-  upgradeAmount: 1
+  upgradeAmount: 1.5
   flavorText: {fileID: 2057398432}
   purchased: 0
 --- !u!1 &144858669
@@ -1136,7 +1136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chitCost: 10
-  upgradeAmount: 0.5
+  upgradeAmount: 1
   flavorText: {fileID: 722120667}
   purchased: 0
 --- !u!1 &171317725
@@ -1697,7 +1697,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chitCost: 40
-  upgradeAmount: 0.5
+  upgradeAmount: 1
   flavorText: {fileID: 309581552}
   purchased: 0
 --- !u!224 &305607109 stripped
@@ -6063,7 +6063,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chitCost: 300
-  upgradeAmount: 1.5
+  upgradeAmount: 2
   flavorText: {fileID: 265263491}
   purchased: 0
 --- !u!212 &831393729 stripped
@@ -7675,7 +7675,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chitCost: 80
-  upgradeAmount: 0.5
+  upgradeAmount: 1
   flavorText: {fileID: 562529487}
   purchased: 0
 --- !u!1 &1092043369
@@ -10113,7 +10113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chitCost: 200
-  upgradeAmount: 1
+  upgradeAmount: 1.5
   flavorText: {fileID: 1593578435}
   purchased: 0
 --- !u!1 &1413945383
@@ -12794,10 +12794,10 @@ MonoBehaviour:
   m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -13833,7 +13833,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chitCost: 500
-  upgradeAmount: 1.5
+  upgradeAmount: 2
   flavorText: {fileID: 2076693971}
   purchased: 0
 --- !u!1 &1888281755

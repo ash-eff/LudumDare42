@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour {
     public static event OutcomeEvent PlayerSuccess;
     public static event OutcomeEvent CorporateSuccess;
     public static event OutcomeEvent NoSuccess;
-    public float time = 0;
+    public float timer = 5;
     public float amountToUnlockNextNeighborhood;
     public Button unlockButton;
     public Button dispenseButton;
@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour {
 
     private void Start()
     {
+        timer = 20f;
         guiManager = FindObjectOfType<GUIManager>();
         player = FindObjectOfType<Player>();
         amountToUnlockNextNeighborhood = 400;
@@ -32,6 +33,13 @@ public class GameManager : MonoBehaviour {
 
     private void Update()
     {
+        timer -= Time.deltaTime;
+        if(timer <= 0)
+        {
+            player.m_persistenceBoost = (player.m_influence * player.m_persistence) * .0001f;
+            timer = 20f;
+        }
+
         CheckForUnlock();
         CheckForDispense();
     }
